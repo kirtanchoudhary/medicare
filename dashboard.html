@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Medicare</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{
+margin:0;
+font-family:Segoe UI, sans-serif;
+background:#f3f7f7;
+}
+
+/* NAVBAR */
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px 40px;
+background:white;
+box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.logo{
+font-size:22px;
+font-weight:600;
+color:#0f766e;
+}
+
+.nav-right{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.nav-right button{
+padding:6px 16px;
+border-radius:20px;
+border:1px solid #ddd;
+background:white;
+cursor:pointer;
+}
+
+.login{
+background:white;
+color:green;
+}
+
+.emer{
+color:red;
+}
+
+.user-box{
+display:none;
+align-items:center;
+gap:10px;
+}
+
+.user-name{
+font-weight:600;
+color:#0f766e;
+font-size:16px;
+}
+
+.logout-btn{
+padding:6px 14px;
+border-radius:20px;
+border:1px solid #ddd;
+background:white;
+cursor:pointer;
+color:#333;
+}
+
+/* HERO */
+.hero{
+text-align:center;
+padding:70px 20px;
+background:#eef6f6;
+}
+
+.hero-greeting{
+margin:0 0 14px;
+font-size:48px;
+font-weight:700;
+font-family:Georgia;
+color:#0f766e;
+display:none;
+line-height:1.2;
+}
+
+.hero h1{
+font-size:48px;
+font-family:Georgia;
+margin-top:0;
+}
+
+.hero span{
+color:#0f766e;
+}
+
+.hero p{
+max-width:600px;
+margin:auto;
+color:#555;
+}
+
+.hero button{
+margin:10px;
+padding:12px 24px;
+border-radius:25px;
+border:none;
+cursor:pointer;
+}
+
+.btn1{
+background:#0f766e;
+color:white;
+}
+
+.btn2{
+background:white;
+border:1px solid #ccc;
+}
+
+/* HOW HELP */
+.section{
+text-align:center;
+padding:60px 20px;
+}
+
+.cards{
+display:flex;
+justify-content:center;
+gap:30px;
+margin-top:30px;
+flex-wrap:wrap;
+}
+
+.card{
+width:260px;
+background:white;
+padding:20px;
+border-radius:14px;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+cursor:pointer;
+transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover{
+transform:translateY(-4px);
+box-shadow:0 10px 22px rgba(0,0,0,0.12);
+}
+
+.card i{
+font-size:28px;
+color:#0f766e;
+}
+
+/* HEALTH TIPS SECTION */
+.health-section{
+padding:60px 20px;
+}
+
+.health-wrap{
+max-width:1100px;
+margin:0 auto;
+background:white;
+border-radius:18px;
+box-shadow:0 4px 14px rgba(0,0,0,0.08);
+padding:35px 30px;
+display:grid;
+grid-template-columns:1.2fr 1fr;
+gap:30px;
+align-items:start;
+}
+
+.health-left h2{
+margin:0 0 10px;
+font-size:38px;
+font-family:Georgia;
+color:#111827;
+}
+
+.health-left p{
+margin:0 0 20px;
+color:#64748b;
+font-size:15px;
+line-height:1.6;
+}
+
+.tip-box{
+background:linear-gradient(135deg,#f8fbfb,#f1f8f7);
+border:1px solid #e3eeee;
+border-radius:16px;
+padding:24px;
+min-height:260px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+position:relative;
+overflow:hidden;
+}
+
+.tip-box::before{
+content:"";
+position:absolute;
+top:-40px;
+right:-40px;
+width:120px;
+height:120px;
+background:rgba(15,118,110,0.08);
+border-radius:50%;
+}
+
+.tip-badge{
+display:inline-block;
+padding:6px 14px;
+border-radius:999px;
+background:#dff4f1;
+color:#0f766e;
+font-weight:700;
+font-size:12px;
+margin-bottom:12px;
+position:relative;
+z-index:1;
+}
+
+.tip-title{
+font-size:24px;
+font-weight:700;
+margin-bottom:12px;
+color:#0f172a;
+position:relative;
+z-index:1;
+}
+
+.tip-list{
+margin:0;
+padding-left:20px;
+text-align:left;
+color:#475569;
+line-height:1.8;
+font-size:15px;
+position:relative;
+z-index:1;
+}
+
+.tip-list li{
+margin-bottom:8px;
+}
+
+.health-right{
+display:grid;
+gap:16px;
+}
+
+.mini-card{
+border-radius:16px;
+padding:20px;
+text-align:left;
+box-shadow:0 3px 10px rgba(0,0,0,0.05);
+transition:transform 0.2s ease;
+}
+
+.mini-card:hover{
+transform:translateY(-3px);
+}
+
+.mini-card h3{
+margin:0 0 8px;
+font-size:18px;
+}
+
+.mini-card p{
+margin:0;
+font-size:14px;
+line-height:1.7;
+color:#475569;
+}
+
+.mint{
+background:#ecfdf5;
+}
+
+.blue{
+background:#eff6ff;
+}
+
+.peach{
+background:#fff7ed;
+}
+
+/* animation */
+.fade-anim{
+opacity:1;
+transform:translateY(0);
+transition:opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-anim.fade-out{
+opacity:0;
+transform:translateY(12px);
+}
+
+.fade-anim.fade-in{
+opacity:1;
+transform:translateY(0);
+}
+
+.glow-dot{
+display:inline-block;
+width:8px;
+height:8px;
+border-radius:50%;
+background:#0f766e;
+margin-right:8px;
+box-shadow:0 0 0 rgba(15,118,110,0.5);
+animation:pulseDot 2s infinite;
+vertical-align:middle;
+}
+
+@keyframes pulseDot{
+0%{ box-shadow:0 0 0 0 rgba(15,118,110,0.45); }
+70%{ box-shadow:0 0 0 10px rgba(15,118,110,0); }
+100%{ box-shadow:0 0 0 0 rgba(15,118,110,0); }
+}
+
+/* EMERGENCY AMBULANCE */
+.emergency-track{
+position:relative;
+height:34px;
+max-width:100%;
+overflow:hidden;
+margin:0 0 -2px;
+pointer-events:none;
+}
+
+.ambulance{
+position:absolute;
+right:-90px;
+top:0;
+display:flex;
+align-items:center;
+gap:4px;
+font-size:24px;
+line-height:1;
+filter:drop-shadow(0 6px 10px rgba(239,68,68,0.28));
+animation:ambulanceRun 10s linear infinite;
+will-change:transform;
+}
+
+.siren-light{
+width:10px;
+height:10px;
+border-radius:50%;
+background:#60a5fa;
+box-shadow:0 0 0 rgba(96,165,250,0.85);
+animation:sirenBlink .55s ease-in-out infinite;
+}
+
+@keyframes sirenBlink{
+0%, 100%{
+opacity:.35;
+transform:scale(.9);
+box-shadow:0 0 0 0 rgba(96,165,250,0.15);
+}
+50%{
+opacity:1;
+transform:scale(1.2);
+box-shadow:0 0 12px 4px rgba(96,165,250,0.95);
+}
+}
+
+@keyframes ambulanceRun{
+0%{
+transform:translateX(0);
+opacity:0;
+}
+5%{
+opacity:1;
+}
+92%{
+opacity:1;
+}
+100%{
+transform:translateX(calc(-100vw - 220px));
+opacity:0;
+}
+}
+
+/* EMERGENCY */
+.emergency{
+background:linear-gradient(90deg,#ff3d3d,#ff0000);
+color:white;
+padding:30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.emergency button{
+padding:10px 20px;
+border-radius:20px;
+border:none;
+cursor:pointer;
+}
+
+@media (prefers-reduced-motion: reduce){
+.ambulance{
+animation:none;
+right:16px;
+opacity:1;
+}
+.siren-light{
+animation:none;
+opacity:1;
+box-shadow:0 0 8px 2px rgba(96,165,250,0.85);
+}
+}
+
+/* FOOTER */
+.footer{
+background:#0b1b2b;
+color:white;
+text-align:center;
+padding:30px;
+}
+
+/* POPUP */
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:999;
+padding:20px;
+}
+
+.popup-box{
+width:370px;
+background:white;
+border-radius:12px;
+position:relative;
+padding:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+.close-btn{
+position:absolute;
+top:8px;
+right:8px;
+background:red;
+color:white;
+border:none;
+border-radius:50%;
+width:28px;
+height:28px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.auth-logo{
+color:#0f766e;
+margin-top:5px;
+margin-bottom:6px;
+text-align:center;
+}
+
+.auth-tag{
+color:#555;
+margin-bottom:18px;
+text-align:center;
+font-size:14px;
+}
+
+.auth-card h2{
+text-align:center;
+margin:0 0 6px;
+}
+
+.auth-card p{
+text-align:center;
+margin:0 0 12px;
+color:#666;
+font-size:14px;
+}
+
+.tabs{
+display:flex;
+background:#eee;
+border-radius:20px;
+margin:12px 0 16px;
+overflow:hidden;
+}
+
+.tabs button{
+flex:1;
+border:none;
+padding:10px;
+cursor:pointer;
+background:transparent;
+}
+
+.tabs button.active{
+background:#0f766e;
+color:white;
+}
+
+label{
+display:block;
+text-align:left;
+margin-top:10px;
+font-size:14px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:5px;
+border:1px solid #ccc;
+border-radius:6px;
+box-sizing:border-box;
+}
+
+.mainBtn{
+width:100%;
+margin-top:15px;
+padding:10px;
+border:none;
+background:#0f766e;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
+
+.hidden{
+display:none;
+}
+
+.auth-alert{
+display:none;
+margin:0 0 14px;
+padding:10px 12px;
+border-radius:8px;
+border:1px solid #fecaca;
+background:#fef2f2;
+color:#b91c1c;
+font-size:13px;
+line-height:1.5;
+text-align:left;
+}
+
+@media (max-width: 900px){
+.health-wrap{
+grid-template-columns:1fr;
+}
+}
+
+@media (max-width: 768px){
+.navbar{
+padding:14px 20px;
+}
+
+.hero h1{
+font-size:38px;
+}
+
+.hero-greeting{
+font-size:16px;
+}
+
+.user-name{
+font-size:15px;
+}
+
+.popup-box{
+width:100%;
+max-width:370px;
+}
+
+.health-left h2{
+font-size:30px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <div class="logo">🩺 Medicare</div>
+
+  <div class="nav-right">
+    <button class="emer" type="button" onclick="window.location.href='/emergency'">Emergency</button>
+
+    <button class="login" id="loginBtnNav" type="button" onclick="showLogin()">
+      Login / Sign Up
+    </button>
+
+    <div class="user-box" id="userBox">
+      <span class="user-name" id="userNameText"></span>
+      <button class="logout-btn" type="button" onclick="logoutUser()">Logout</button>
+    </div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-greeting" id="heroGreeting"></div>
+
+  <h1>
+    Your Health,
+    <span>Our Priority</span>
+  </h1>
+
+  <p>
+    AI-powered symptom checking, virtual consultations,
+    and affordable access to real doctors.
+  </p>
+
+  <button class="btn1 protected-btn" type="button" data-action="symptom">
+    Check Your Symptoms
+  </button>
+
+  <button class="btn2 protected-btn" type="button" data-action="appointments">
+    Find a Doctor
+  </button>
+</div>
+
+<div class="section">
+  <h2>How We Help You</h2>
+
+  <div class="cards">
+    <div class="card protected-btn" data-action="symptom">
+      <i class="fa-solid fa-heart-pulse"></i>
+      <h3>Symptom Checker</h3>
+      <p>AI-powered analysis</p>
+    </div>
+
+    <div class="card protected-btn" data-action="doctor">
+      <i class="fa-solid fa-comment"></i>
+      <h3>Virtual Doctor</h3>
+      <p>Chat with AI doctor</p>
+    </div>
+
+    <div class="card protected-btn" data-action="appointments">
+      <i class="fa-solid fa-calendar"></i>
+      <h3>Book Appointments</h3>
+      <p>Consult doctors</p>
+    </div>
+  </div>
+</div>
+
+<div class="health-section">
+  <div class="health-wrap">
+    <div class="health-left">
+      <h2>Healthy Tips & Quick Facts</h2>
+      <p>
+        Simple daily health reminders to help you stay active, hydrated,
+        and mentally refreshed. These points update automatically every 10 seconds.
+      </p>
+
+      <div class="tip-box fade-anim" id="mainTipBox">
+        <span class="tip-badge" id="tipBadge">Healthy Tip</span>
+        <div class="tip-title" id="tipTitle"><span class="glow-dot"></span>Stay Hydrated</div>
+        <ul class="tip-list" id="tipList">
+          <li>Drink water regularly throughout the day.</li>
+          <li>Keep a bottle near your study or work desk.</li>
+          <li>Hydration helps support focus and energy.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="health-right">
+      <div class="mini-card mint fade-anim" id="factCard">
+        <h3>Daily Wellness Reminder</h3>
+        <p id="sideFact">
+          Regular walking can support heart health, mood, and better stamina.
+        </p>
+      </div>
+
+      <div class="mini-card blue fade-anim" id="lineCard">
+        <h3>Quick Health Fact</h3>
+        <p id="sideLine">
+          Eat balanced meals, sleep on time, and stay active for a stronger routine.
+        </p>
+      </div>
+
+      <div class="mini-card peach">
+        <h3>Healthy Living Line</h3>
+        <p>
+          Small healthy habits repeated every day can create a stronger long-term routine.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="emergency-track" aria-hidden="true">
+  <div class="ambulance">
+    <span class="siren-light"></span>
+    <span>🚑</span>
+  </div>
+</div>
+
+<div class="emergency">
+  <div>
+    <h3>Medical Emergency?</h3>
+    Access important emergency contacts instantly
+  </div>
+
+  <button type="button" onclick="window.location.href='/emergency'">
+    Emergency Contacts
+  </button>
+</div>
+
+<div class="footer">
+  <h3>🩺 Medicare</h3>
+  <p>Your trusted healthcare companion</p>
+</div>
+
+<div class="popup" id="popup">
+  <div class="popup-box">
+    <button class="close-btn" type="button" onclick="closeLogin()">X</button>
+
+    <div class="auth-card">
+      <h1 class="auth-logo">🩺 Medicare</h1>
+      <p class="auth-tag">Your health journey starts here</p>
+
+      <h2>Welcome</h2>
+      <p>Login or create an account to continue</p>
+
+      <div class="tabs">
+        <button id="loginTabBtn" class="active" type="button">Login</button>
+        <button id="signupTabBtn" type="button">Sign Up</button>
+      </div>
+
+      <div class="auth-alert" id="authAlertBox"></div>
+
+      <form id="loginForm">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com" required>
+
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="******" required>
+
+        <button class="mainBtn" type="submit">Login</button>
+      </form>
+
+      <form id="signupForm" class="hidden">
+        <label>Full Name</label>
+        <input type="text" id="signupName" placeholder="John Doe" required>
+
+        <label>Email</label>
+        <input type="email" id="signupEmail" placeholder="you@example.com" required>
+
+        <label>Password</label>
+        <input type="password" id="signupPassword" placeholder="******" required>
+
+        <button class="mainBtn" type="submit">Sign Up</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+const popup = document.getElementById("popup");
+const loginBtnNav = document.getElementById("loginBtnNav");
+const userBox = document.getElementById("userBox");
+const userNameText = document.getElementById("userNameText");
+const loginTabBtn = document.getElementById("loginTabBtn");
+const signupTabBtn = document.getElementById("signupTabBtn");
+const loginForm = document.getElementById("loginForm");
+const signupForm = document.getElementById("signupForm");
+const heroGreeting = document.getElementById("heroGreeting");
+const authAlertBox = document.getElementById("authAlertBox");
+
+let pendingAction = null;
+
+function showLogin(){
+  popup.style.display = "flex";
+}
+
+function closeLogin(){
+  popup.style.display = "none";
+  clearAuthAlert();
+}
+
+function showAuthAlert(message){
+  authAlertBox.textContent = message;
+  authAlertBox.style.display = "block";
+}
+
+function clearAuthAlert(){
+  authAlertBox.textContent = "";
+  authAlertBox.style.display = "none";
+}
+
+function isLoggedIn(){
+  return !!localStorage.getItem("userName");
+}
+
+function normalizeName(name){
+  return String(name || "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(" ");
+}
+
+function runAction(action){
+  if(action === "symptom"){
+    window.location.href = "/symptom";
+  }else if(action === "doctor"){
+    window.location.href = "/doctor";
+  }else if(action === "appointments"){
+    window.location.href = "/appointments";
+  }
+}
+
+function requireLogin(action){
+  if(!isLoggedIn()){
+    pendingAction = action;
+    showLogin();
+    clearAuthAlert();
+    return;
+  }
+  runAction(action);
+}
+
+function updateNavbar(){
+  const rawUserName = localStorage.getItem("userName");
+  const userName = normalizeName(rawUserName);
+  const loginMode = localStorage.getItem("loginMode");
+
+  if(userName){
+    localStorage.setItem("userName", userName);
+    loginBtnNav.style.display = "none";
+    userBox.style.display = "flex";
+    userNameText.textContent = userName;
+
+    heroGreeting.style.display = "block";
+    if(loginMode === "returning"){
+      heroGreeting.textContent = `Welcome back, ${userName}`;
+    }else{
+      heroGreeting.textContent = `Hello, ${userName}`;
+    }
+  }else{
+    loginBtnNav.style.display = "inline-block";
+    userBox.style.display = "none";
+    userNameText.textContent = "";
+    heroGreeting.style.display = "none";
+    heroGreeting.textContent = "";
+  }
+}
+
+function logoutUser(){
+  localStorage.removeItem("userName");
+  localStorage.removeItem("loginMode");
+  pendingAction = null;
+  updateNavbar();
+  window.location.href = "/dashboard";
+}
+
+loginTabBtn.addEventListener("click", function(){
+  loginForm.classList.remove("hidden");
+  signupForm.classList.add("hidden");
+  clearAuthAlert();
+  loginTabBtn.classList.add("active");
+  signupTabBtn.classList.remove("active");
+});
+
+signupTabBtn.addEventListener("click", function(){
+  signupForm.classList.remove("hidden");
+  loginForm.classList.add("hidden");
+  clearAuthAlert();
+  signupTabBtn.classList.add("active");
+  loginTabBtn.classList.remove("active");
+});
+
+document.querySelectorAll(".protected-btn").forEach(function(item){
+  item.addEventListener("click", function(){
+    const action = this.getAttribute("data-action");
+    requireLogin(action);
+  });
+});
+
+function isValidLowercaseGmail(email){
+  return /^[a-z0-9._%+-]+@gmail\.com$/.test(email);
+}
+
+loginForm.addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  clearAuthAlert();
+
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  if(!isValidLowercaseGmail(email)){
+    showAuthAlert("Please enter lowercase @gmail.com email only.");
+    return;
+  }
+
+  let res = await fetch("/login",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      email:email,
+      password:password
+    })
+  });
+
+  let data = await res.json();
+
+  if(res.ok){
+    clearAuthAlert();
+    localStorage.setItem("userName", normalizeName(data.name));
+    localStorage.setItem("loginMode", "returning");
+    closeLogin();
+    updateNavbar();
+
+    if(pendingAction){
+      const actionToRun = pendingAction;
+      pendingAction = null;
+      runAction(actionToRun);
+    }else{
+      window.location.href = "/dashboard";
+    }
+  }else{
+    showAuthAlert(data.msg || "Something went wrong. Please try again.");
+  }
+});
+
+signupForm.addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  clearAuthAlert();
+
+  const name = document.getElementById("signupName").value.trim();
+  const email = document.getElementById("signupEmail").value.trim();
+  const password = document.getElementById("signupPassword").value.trim();
+
+  if(!isValidLowercaseGmail(email)){
+    showAuthAlert("Please enter lowercase @gmail.com email only.");
+    return;
+  }
+
+  let res = await fetch("/signup",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      name:name,
+      email:email,
+      password:password
+    })
+  });
+
+  let data = await res.json();
+
+  if(res.ok){
+    clearAuthAlert();
+    localStorage.setItem("userName", normalizeName(data.name));
+    localStorage.setItem("loginMode", "new");
+    closeLogin();
+    updateNavbar();
+
+    if(pendingAction){
+      const actionToRun = pendingAction;
+      pendingAction = null;
+      runAction(actionToRun);
+    }else{
+      window.location.href = "/dashboard";
+    }
+  }else{
+    showAuthAlert(data.msg || "Something went wrong. Please try again.");
+  }
+});
+
+window.onclick = function(e){
+  if(e.target === popup){
+    closeLogin();
+  }
+};
+
+const rotatingTips = [
+  {
+    badge: "Healthy Tip",
+    title: "Stay Hydrated",
+    list: [
+      "Drink water regularly throughout the day.",
+      "Keep a bottle near your study or work desk.",
+      "Hydration helps support focus and energy."
+    ],
+    fact: "Regular walking can support heart health, mood, and better stamina.",
+    line: "Eat balanced meals, sleep on time, and stay active for a stronger routine."
+  },
+  {
+    badge: "Quick Fact",
+    title: "Sleep Matters",
+    list: [
+      "A consistent sleep routine can improve concentration.",
+      "Late-night screen use may disturb sleep quality.",
+      "Rest supports recovery and daily performance."
+    ],
+    fact: "Good sleep supports memory, mood balance, and body recovery.",
+    line: "Healthy living often starts with proper sleep and a calm routine."
+  },
+  {
+    badge: "Wellness Tip",
+    title: "Move Your Body",
+    list: [
+      "Light stretching can reduce stiffness.",
+      "A short daily walk can help improve circulation.",
+      "Small movement breaks are useful during long sitting hours."
+    ],
+    fact: "Even short daily activity can positively affect overall health.",
+    line: "Consistency in movement is often better than rare intense effort."
+  },
+  {
+    badge: "Nutrition Fact",
+    title: "Balanced Meals Help",
+    list: [
+      "Include fruits and vegetables in daily meals.",
+      "Avoid skipping meals too often.",
+      "Balanced food choices can help maintain energy."
+    ],
+    fact: "Eating a mix of nutrients supports steady energy through the day.",
+    line: "Simple food choices made daily can shape better long-term health."
+  }
+];
+
+let tipIndex = 0;
+
+function animateSwap(element){
+  element.classList.add("fade-out");
+  setTimeout(() => {
+    element.classList.remove("fade-out");
+    element.classList.add("fade-in");
+    setTimeout(() => {
+      element.classList.remove("fade-in");
+    }, 850);
+  }, 400);
+}
+
+function renderTip(index){
+  const item = rotatingTips[index];
+
+  document.getElementById("tipBadge").textContent = item.badge;
+  document.getElementById("tipTitle").innerHTML = `<span class="glow-dot"></span>${item.title}`;
+  document.getElementById("tipList").innerHTML = item.list.map(point => `<li>${point}</li>`).join("");
+  document.getElementById("sideFact").textContent = item.fact;
+  document.getElementById("sideLine").textContent = item.line;
+
+  animateSwap(document.getElementById("mainTipBox"));
+  animateSwap(document.getElementById("factCard"));
+  animateSwap(document.getElementById("lineCard"));
+}
+
+setInterval(() => {
+  tipIndex = (tipIndex + 1) % rotatingTips.length;
+  renderTip(tipIndex);
+}, 10000);
+
+renderTip(tipIndex);
+updateNavbar();
+</script>
+
+</body>
+</html>

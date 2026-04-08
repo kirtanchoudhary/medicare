@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find a Doctor</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Segoe UI, system-ui, sans-serif;
+  background:#f4f7f8;
+  color:#0f172a;
+}
+
+.navbar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:18px 28px;
+  background:#ffffff;
+  border-bottom:1px solid #e5e7eb;
+  color:#0f766e;
+  font-weight:700;
+  font-size:17px;
+}
+
+.navbar i{
+  cursor:pointer;
+}
+
+.container{
+  max-width:1180px;
+  margin:36px auto 60px;
+  padding:0 22px;
+}
+
+.page-head h1{
+  margin:0;
+  font-family:Georgia, serif;
+  font-size:34px;
+  color:#0f172a;
+}
+
+.page-head p{
+  margin:10px 0 0;
+  color:#64748b;
+  font-size:16px;
+}
+
+.doctors{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:22px;
+  margin-top:28px;
+}
+
+.card{
+  background:#ffffff;
+  border:1px solid #dbe4e8;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 8px 20px rgba(15, 23, 42, 0.06);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 14px 28px rgba(15, 23, 42, 0.10);
+}
+
+.avatar{
+  width:92px;
+  height:92px;
+  border-radius:50%;
+  object-fit:cover;
+  display:block;
+  margin:0 auto 14px;
+  border:4px solid #d8efea;
+}
+
+.doc-name{
+  text-align:center;
+  font-size:18px;
+  font-weight:700;
+  margin:2px 0 6px;
+}
+
+.doc-role{
+  text-align:center;
+  color:#0f766e;
+  font-weight:600;
+  margin-bottom:18px;
+}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  padding:8px 0;
+  font-size:15px;
+  border-bottom:1px solid #eef2f3;
+}
+
+.info-row:last-of-type{
+  border-bottom:none;
+  margin-bottom:14px;
+}
+
+.info-label{
+  color:#64748b;
+}
+
+.info-value{
+  color:#0f172a;
+  font-weight:600;
+  text-align:right;
+}
+
+.fee{
+  color:#0f766e;
+  font-weight:700;
+}
+
+.rating{
+  color:#f59e0b;
+  font-weight:700;
+}
+
+.status{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 10px;
+  border-radius:999px;
+  background:#dcfce7;
+  color:#15803d;
+  font-size:12px;
+  font-weight:700;
+}
+
+.book-btn{
+  width:100%;
+  margin-top:14px;
+  border:none;
+  border-radius:999px;
+  background:#0f7b77;
+  color:#fff;
+  padding:14px 16px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  transition:background .18s ease;
+}
+
+.book-btn:hover{
+  background:#0d6662;
+}
+
+.form-wrap{
+  display:none;
+  margin-top:34px;
+  background:#ffffff;
+  border:1px solid #dbe4e8;
+  border-radius:18px;
+  padding:26px;
+  box-shadow:0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+.form-top{
+  margin-bottom:18px;
+}
+
+.form-top h2{
+  margin:0 0 6px;
+  font-size:26px;
+  color:#0f172a;
+}
+
+.form-top p{
+  margin:0;
+  color:#64748b;
+}
+
+.booking-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:16px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+}
+
+.field.full{
+  grid-column:1 / -1;
+}
+
+.field label{
+  margin-bottom:7px;
+  font-size:14px;
+  font-weight:600;
+  color:#334155;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  border:1px solid #cfd8dc;
+  border-radius:12px;
+  padding:13px 14px;
+  font-size:14px;
+  outline:none;
+  background:#fff;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:#0f766e;
+  box-shadow:0 0 0 3px rgba(15,118,110,.10);
+}
+
+.field textarea{
+  resize:vertical;
+  min-height:110px;
+}
+
+.field-error{
+  display:none;
+  margin-top:7px;
+  font-size:13px;
+  color:#b91c1c;
+  line-height:1.5;
+}
+
+.input-error{
+  border-color:#ef4444 !important;
+  box-shadow:0 0 0 3px rgba(239,68,68,.10) !important;
+}
+
+.form-actions{
+  display:flex;
+  gap:12px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+
+.primary-btn{
+  border:none;
+  background:#0f7b77;
+  color:white;
+  padding:13px 22px;
+  border-radius:999px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:14px;
+}
+
+.secondary-btn{
+  border:1px solid #cfd8dc;
+  background:#fff;
+  color:#334155;
+  padding:13px 22px;
+  border-radius:999px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:14px;
+}
+
+.success-box{
+  display:none;
+  margin-top:20px;
+  border:1px solid #bbf7d0;
+  background:#f0fdf4;
+  color:#166534;
+  border-radius:14px;
+  padding:16px 18px;
+  font-weight:600;
+  line-height:1.6;
+}
+
+.note-box{
+  margin-top:18px;
+  padding:14px 16px;
+  border-radius:14px;
+  background:#f8fafc;
+  color:#475569;
+  font-size:14px;
+  border:1px solid #e2e8f0;
+}
+
+@media (max-width: 768px){
+  .container{
+    padding:0 16px;
+  }
+
+  .page-head h1{
+    font-size:28px;
+  }
+
+  .booking-grid{
+    grid-template-columns:1fr;
+  }
+
+  .navbar{
+    padding:16px 16px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <i class="fa-solid fa-arrow-left" onclick="goBack()"></i>
+  <i class="fa-solid fa-stethoscope"></i>
+  <span>Find a Doctor</span>
+</div>
+
+<div class="container">
+  <div class="page-head">
+    <h1>Our Doctors</h1>
+    <p>Consult with experienced healthcare professionals at affordable prices</p>
+  </div>
+
+  <div class="doctors">
+    <div class="card">
+      <img class="avatar" src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=300&q=80" alt="Doctor">
+      <div class="doc-name">Dr. Priya Sharma</div>
+      <div class="doc-role">General Physician</div>
+
+      <div class="info-row">
+        <span class="info-label">Experience:</span>
+        <span class="info-value">10 years</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Consultation Fee:</span>
+        <span class="info-value fee">₹300</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Rating:</span>
+        <span class="info-value rating"><i class="fa-solid fa-star"></i> 4.8</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Status:</span>
+        <span class="status">Available</span>
+      </div>
+
+      <button class="book-btn" onclick="bookDoctor('Dr. Priya Sharma','General Physician','₹300')">
+        <i class="fa-regular fa-calendar-check"></i>
+        Book Appointment
+      </button>
+    </div>
+
+    <div class="card">
+      <img class="avatar" src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=300&q=80" alt="Doctor">
+      <div class="doc-name">Dr. Rajesh Kumar</div>
+      <div class="doc-role">Pediatrician</div>
+
+      <div class="info-row">
+        <span class="info-label">Experience:</span>
+        <span class="info-value">15 years</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Consultation Fee:</span>
+        <span class="info-value fee">₹500</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Rating:</span>
+        <span class="info-value rating"><i class="fa-solid fa-star"></i> 4.9</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Status:</span>
+        <span class="status">Available</span>
+      </div>
+
+      <button class="book-btn" onclick="bookDoctor('Dr. Rajesh Kumar','Pediatrician','₹500')">
+        <i class="fa-regular fa-calendar-check"></i>
+        Book Appointment
+      </button>
+    </div>
+
+    <div class="card">
+      <img class="avatar" src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=300&q=80" alt="Doctor">
+      <div class="doc-name">Dr. Anjali Verma</div>
+      <div class="doc-role">Gynecologist</div>
+
+      <div class="info-row">
+        <span class="info-label">Experience:</span>
+        <span class="info-value">12 years</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Consultation Fee:</span>
+        <span class="info-value fee">₹600</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Rating:</span>
+        <span class="info-value rating"><i class="fa-solid fa-star"></i> 4.7</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Status:</span>
+        <span class="status">Available</span>
+      </div>
+
+      <button class="book-btn" onclick="bookDoctor('Dr. Anjali Verma','Gynecologist','₹600')">
+        <i class="fa-regular fa-calendar-check"></i>
+        Book Appointment
+      </button>
+    </div>
+
+    <div class="card">
+      <img class="avatar" src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=300&q=80" alt="Doctor">
+      <div class="doc-name">Dr. Vikram Singh</div>
+      <div class="doc-role">Cardiologist</div>
+
+      <div class="info-row">
+        <span class="info-label">Experience:</span>
+        <span class="info-value">20 years</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Consultation Fee:</span>
+        <span class="info-value fee">₹700</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Rating:</span>
+        <span class="info-value rating"><i class="fa-solid fa-star"></i> 4.9</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Status:</span>
+        <span class="status">Available</span>
+      </div>
+
+      <button class="book-btn" onclick="bookDoctor('Dr. Vikram Singh','Cardiologist','₹700')">
+        <i class="fa-regular fa-calendar-check"></i>
+        Book Appointment
+      </button>
+    </div>
+  </div>
+
+  <div class="form-wrap" id="formWrap">
+    <div class="form-top">
+      <h2>Book Appointment</h2>
+      <p id="selectedDoctorText">Complete the details below to confirm your appointment.</p>
+    </div>
+
+    <div class="booking-grid">
+      <div class="field">
+        <label>Patient Name</label>
+        <input
+          type="text"
+          id="patientName"
+          placeholder="Enter your full name"
+          oninput="validatePatientNameLive()"
+          onkeypress="return allowOnlyLetters(event)"
+          onpaste="handleNamePaste(event)"
+          autocomplete="off"
+        >
+        <div class="field-error" id="patientNameError"></div>
+      </div>
+
+      <div class="field">
+        <label>Doctor</label>
+        <input type="text" id="doctorField" readonly>
+      </div>
+
+      <div class="field">
+        <label>Specialization</label>
+        <input type="text" id="specializationField" readonly>
+      </div>
+
+      <div class="field">
+        <label>Consultation Fee</label>
+        <input type="text" id="feeField" readonly>
+      </div>
+
+      <div class="field">
+        <label>Appointment Date</label>
+        <input type="date" id="dateField" min="2026-01-01" oninput="validateDateLive()">
+        <div class="field-error" id="dateError"></div>
+      </div>
+
+      <div class="field">
+        <label>Preferred Time</label>
+        <select id="timeField">
+          <option value="">Select Time Slot</option>
+          <option>09:30 AM</option>
+          <option>11:00 AM</option>
+          <option>01:00 PM</option>
+          <option>03:30 PM</option>
+          <option>05:00 PM</option>
+          <option>07:00 PM</option>
+        </select>
+      </div>
+
+      <div class="field full">
+        <label>Reason for Visit</label>
+        <textarea id="reasonField" placeholder="Describe your symptoms or consultation reason" oninput="validateReasonLive()"></textarea>
+        <div class="field-error" id="reasonError"></div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="primary-btn" onclick="confirmBooking()">Confirm Appointment</button>
+      <button class="secondary-btn" onclick="cancelBooking()">Cancel</button>
+    </div>
+
+    <div class="success-box" id="successBox"></div>
+
+    <div class="note-box">
+      Your booking details will be saved in browser storage for demo purpose.
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedDoctor = "";
+let selectedSpecialization = "";
+let selectedFee = "";
+
+function goBack(){
+  window.location.href = "/dashboard";
+}
+
+function getTodayDateString(){
+  const today = new Date();
+  const y = today.getFullYear();
+  const m = String(today.getMonth() + 1).padStart(2, "0");
+  const d = String(today.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function bookDoctor(name, specialization, fee){
+  selectedDoctor = name;
+  selectedSpecialization = specialization;
+  selectedFee = fee;
+
+  document.getElementById("formWrap").style.display = "block";
+  document.getElementById("selectedDoctorText").innerText =
+    `You are booking an appointment with ${name} (${specialization}).`;
+
+  document.getElementById("doctorField").value = name;
+  document.getElementById("specializationField").value = specialization;
+  document.getElementById("feeField").value = fee;
+
+  const dateField = document.getElementById("dateField");
+  const today = getTodayDateString();
+  const fixedMin = "2026-01-01";
+  dateField.min = today > fixedMin ? today : fixedMin;
+
+  clearFieldError("patientName");
+  clearFieldError("date");
+  clearFieldError("reason");
+
+  document.getElementById("successBox").style.display = "none";
+  document.getElementById("formWrap").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function cancelBooking(){
+  document.getElementById("formWrap").style.display = "none";
+  document.getElementById("patientName").value = "";
+  document.getElementById("doctorField").value = "";
+  document.getElementById("specializationField").value = "";
+  document.getElementById("feeField").value = "";
+  document.getElementById("dateField").value = "";
+  document.getElementById("timeField").value = "";
+  document.getElementById("reasonField").value = "";
+  document.getElementById("successBox").style.display = "none";
+
+  clearFieldError("patientName");
+  clearFieldError("date");
+  clearFieldError("reason");
+}
+
+function showFieldError(fieldKey, message){
+  const fieldMap = {
+    patientName: document.getElementById("patientName"),
+    date: document.getElementById("dateField"),
+    reason: document.getElementById("reasonField")
+  };
+
+  const errorMap = {
+    patientName: document.getElementById("patientNameError"),
+    date: document.getElementById("dateError"),
+    reason: document.getElementById("reasonError")
+  };
+
+  fieldMap[fieldKey].classList.add("input-error");
+  errorMap[fieldKey].style.display = "block";
+  errorMap[fieldKey].textContent = message;
+}
+
+function clearFieldError(fieldKey){
+  const fieldMap = {
+    patientName: document.getElementById("patientName"),
+    date: document.getElementById("dateField"),
+    reason: document.getElementById("reasonField")
+  };
+
+  const errorMap = {
+    patientName: document.getElementById("patientNameError"),
+    date: document.getElementById("dateError"),
+    reason: document.getElementById("reasonError")
+  };
+
+  fieldMap[fieldKey].classList.remove("input-error");
+  errorMap[fieldKey].style.display = "none";
+  errorMap[fieldKey].textContent = "";
+}
+
+function allowOnlyLetters(event){
+  const key = event.key;
+
+  if(
+    key === "Backspace" ||
+    key === "Delete" ||
+    key === "ArrowLeft" ||
+    key === "ArrowRight" ||
+    key === "Tab" ||
+    key === " "
+  ){
+    return true;
+  }
+
+  return /^[A-Za-z]$/.test(key);
+}
+
+function handleNamePaste(event){
+  event.preventDefault();
+  const pasted = (event.clipboardData || window.clipboardData).getData("text");
+  const cleaned = pasted.replace(/[^A-Za-z\s]/g, "");
+  document.getElementById("patientName").value = cleaned;
+  validatePatientNameLive();
+}
+
+function validatePatientNameLive(){
+  const patientName = document.getElementById("patientName").value.trim();
+
+  if(!patientName){
+    clearFieldError("patientName");
+    return true;
+  }
+
+  if(!/^[A-Za-z\s]+$/.test(patientName)){
+    showFieldError(
+      "patientName",
+      "Please enter a valid name using letters only."
+    );
+    return false;
+  }
+
+  if(patientName.length < 3){
+    showFieldError(
+      "patientName",
+      "Name must be at least 3 letters long."
+    );
+    return false;
+  }
+
+  clearFieldError("patientName");
+  return true;
+}
+
+function isValidTextInput(text){
+  const value = text.trim().replace(/\s+/g, " ");
+
+  if(value.length < 5){
+    return false;
+  }
+
+  const allowedChars = value.match(/[a-zA-Z0-9\s,\-()/'.]/g) || [];
+  const allowedRatio = allowedChars.length / Math.max(value.length, 1);
+  const lettersCount = (value.match(/[a-zA-Z]/g) || []).length;
+  const digits = value.match(/[0-9]/g) || [];
+  const weirdSymbols = value.match(/[@#$%^&*_+=~`|<>\\{}\[\];]/g) || [];
+  const words = value.match(/[a-zA-Z']+/g) || [];
+
+  if(allowedRatio < 0.8){
+    return false;
+  }
+
+  if(lettersCount < 4){
+    return false;
+  }
+
+  if(weirdSymbols.length > 0){
+    return false;
+  }
+
+  if(digits.length > 3){
+    return false;
+  }
+
+  if(words.length < 1){
+    return false;
+  }
+
+  const meaningfulWords = words.filter(word => word.length >= 2);
+  if(meaningfulWords.length < 1){
+    return false;
+  }
+
+  const uniqueWords = new Set(meaningfulWords.map(word => word.toLowerCase()));
+  if(uniqueWords.size === 1 && meaningfulWords.length >= 3){
+    return false;
+  }
+
+  const suspiciousLongWord = meaningfulWords.some(word => word.length > 16 && !/[aeiou]/i.test(word));
+  if(suspiciousLongWord){
+    return false;
+  }
+
+  const allWordsSuspicious = meaningfulWords.every(word => !/[aeiou]/i.test(word) && word.length > 4);
+  if(allWordsSuspicious){
+    return false;
+  }
+
+  const joinedWords = meaningfulWords.join("");
+  if(joinedWords.length >= 12 && !/[aeiou]/i.test(joinedWords)){
+    return false;
+  }
+
+  return true;
+}
+
+function validateReasonLive(){
+  const reason = document.getElementById("reasonField").value.trim();
+
+  if(!reason){
+    clearFieldError("reason");
+    return true;
+  }
+
+  if(!isValidTextInput(reason)){
+    showFieldError(
+      "reason",
+      "Please write a meaningful reason in simple words, such as: fever since morning, sore throat and cough, chest pain while breathing."
+    );
+    return false;
+  }
+
+  clearFieldError("reason");
+  return true;
+}
+
+function validateDateLive(){
+  const dateField = document.getElementById("dateField");
+  const value = dateField.value;
+
+  if(!value){
+    clearFieldError("date");
+    return true;
+  }
+
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+  if(!datePattern.test(value)){
+    showFieldError("date", "Please select a valid date in YYYY-MM-DD format.");
+    return false;
+  }
+
+  const selectedDate = new Date(value + "T00:00:00");
+  const selectedYear = selectedDate.getFullYear();
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  if(String(selectedYear).length !== 4){
+    showFieldError("date", "Year must be exactly 4 digits.");
+    return false;
+  }
+
+  if(selectedYear < 2026){
+    showFieldError("date", "Please select a date from the year 2026 or later.");
+    return false;
+  }
+
+  if(selectedDate < today){
+    showFieldError("date", "Past dates are not allowed. Please select today or a future date.");
+    return false;
+  }
+
+  clearFieldError("date");
+  return true;
+}
+
+function confirmBooking(){
+  const patientName = document.getElementById("patientName").value.trim();
+  const date = document.getElementById("dateField").value;
+  const time = document.getElementById("timeField").value;
+  const reason = document.getElementById("reasonField").value.trim();
+
+  clearFieldError("patientName");
+  clearFieldError("date");
+  clearFieldError("reason");
+
+  if(!selectedDoctor){
+    alert("Please select a doctor first.");
+    return;
+  }
+
+  let hasError = false;
+
+  if(!patientName){
+    showFieldError("patientName", "Please enter the patient name.");
+    hasError = true;
+  }else if(!validatePatientNameLive()){
+    hasError = true;
+  }
+
+  if(!date){
+    showFieldError("date", "Please select an appointment date.");
+    hasError = true;
+  }else if(!validateDateLive()){
+    hasError = true;
+  }
+
+  if(!time){
+    alert("Please select a preferred time.");
+    hasError = true;
+  }
+
+  if(!reason){
+    showFieldError("reason", "Please enter the reason for visit.");
+    hasError = true;
+  }else if(!validateReasonLive()){
+    hasError = true;
+  }
+
+  if(hasError){
+    return;
+  }
+
+  const booking = {
+    doctor: selectedDoctor,
+    specialization: selectedSpecialization,
+    fee: selectedFee,
+    patientName: patientName,
+    date: date,
+    time: time,
+    reason: reason,
+    createdAt: new Date().toISOString()
+  };
+
+  const allBookings = JSON.parse(localStorage.getItem("appointments")) || [];
+  allBookings.push(booking);
+  localStorage.setItem("appointments", JSON.stringify(allBookings));
+
+  const successBox = document.getElementById("successBox");
+  successBox.style.display = "block";
+  successBox.innerHTML = `
+    ✅ Appointment booked successfully with <b>${selectedDoctor}</b><br>
+    Date: <b>${date}</b> | Time: <b>${time}</b>
+  `;
+
+  document.getElementById("patientName").value = "";
+  document.getElementById("dateField").value = "";
+  document.getElementById("timeField").value = "";
+  document.getElementById("reasonField").value = "";
+
+  clearFieldError("patientName");
+  clearFieldError("date");
+  clearFieldError("reason");
+}
+</script>
+
+</body>
+</html>

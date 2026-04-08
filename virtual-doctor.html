@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Virtual Doctor</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{
+margin:0;
+font-family:system-ui;
+background:#f4f6f8;
+}
+
+.navbar{
+display:flex;
+align-items:center;
+gap:8px;
+padding:12px 30px;
+background:white;
+border-bottom:1px solid #ddd;
+color:#0f766e;
+font-weight:600;
+}
+
+.back{
+cursor:pointer;
+}
+
+.title{
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.container{
+max-width:900px;
+margin:40px auto;
+}
+
+.chatBox{
+background:white;
+border-radius:12px;
+border:1px solid #ddd;
+height:500px;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+.chatArea{
+flex:1;
+padding:20px;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.welcome{
+flex:1;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+color:#0f766e;
+text-align:center;
+}
+
+.welcome i{
+font-size:40px;
+margin-bottom:10px;
+}
+
+.welcome h2{
+margin:0 0 10px;
+}
+
+.welcome p{
+max-width:520px;
+line-height:1.7;
+margin:0;
+}
+
+.msg{
+padding:10px 14px;
+border-radius:12px;
+max-width:72%;
+line-height:1.6;
+white-space:pre-wrap;
+word-break:break-word;
+}
+
+.user{
+background:#0f766e;
+color:white;
+align-self:flex-end;
+}
+
+.bot{
+background:#eef6f6;
+color:#0f172a;
+align-self:flex-start;
+}
+
+.typing{
+font-style:italic;
+opacity:0.8;
+}
+
+.inputArea{
+display:flex;
+border-top:1px solid #ddd;
+padding:10px;
+gap:10px;
+}
+
+.inputArea input{
+flex:1;
+padding:10px;
+border-radius:20px;
+border:1px solid #ccc;
+outline:none;
+}
+
+.inputArea button{
+background:#0f766e;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:20px;
+cursor:pointer;
+min-width:72px;
+}
+
+.inputArea button:disabled{
+opacity:0.7;
+cursor:not-allowed;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <i class="fa-solid fa-arrow-left back" onclick="goBack()"></i>
+  <div class="title">
+    <i class="fa-regular fa-comment"></i>
+    Virtual Doctor
+  </div>
+</div>
+
+<div class="container">
+  <div class="chatBox">
+
+    <div id="chat" class="chatArea">
+      <div id="welcomeBox" class="welcome">
+        <i class="fa-solid fa-robot"></i>
+        <h2>Hi! I'm Dr. Medicare</h2>
+        <p>
+          I'm here to help answer your health questions
+          and provide medical guidance.
+          Feel free to ask me anything!
+        </p>
+      </div>
+    </div>
+
+    <div class="inputArea">
+      <input id="msg" placeholder="Ask anything..." onkeydown="handleKey(event)">
+      <button id="sendBtn" onclick="sendMsg()">Send</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let history = [];
+
+function goBack(){
+  window.location.href="/dashboard";
+}
+
+function handleKey(event){
+  if(event.key === "Enter"){
+    sendMsg();
+  }
+}
+
+function removeWelcome(){
+  const welcome = document.getElementById("welcomeBox");
+  if(welcome){
+    welcome.remove();
+  }
+}
+
+function addMsg(text, type){
+  removeWelcome();
+
+  const div = document.createElement("div");
+  div.className = "msg " + type;
+  div.innerText = text;
+
+  const chat = document.getElementById("chat");
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+
+  return div;
+}
+
+async function sendMsg(){
+  let input = document.getElementById("msg");
+  let sendBtn = document.getElementById("sendBtn");
+  let text = input.value.trim();
+
+  if(!text) return;
+
+  addMsg(text, "user");
+  history.push({ role: "user", content: text });
+  input.value = "";
+  sendBtn.disabled = true;
+
+  const typingMsg = addMsg("Dr. Medicare is typing...", "bot typing");
+
+  try{
+    let res = await fetch("/doctor-chat", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({ history: history })
+    });
+
+    let data = await res.json();
+    typingMsg.remove();
+
+    const reply = data.reply || "Sorry, I could not respond right now.";
+    addMsg(reply, "bot");
+    history.push({ role: "assistant", content: reply });
+
+  }catch(err){
+    typingMsg.remove();
+    addMsg("Server error. Please try again.", "bot");
+  }finally{
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+</script>
+
+</body>
+</html>

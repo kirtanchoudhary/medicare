@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medicare Auth</title>
+
+<style>
+
+body{
+margin:0;
+font-family: Arial, sans-serif;
+background:#e6efef;
+display:flex;
+justify-content:center;
+align-items:center;
+height:95vh;
+}
+
+.container{
+text-align:center;
+}
+
+.logo{
+color:#0f766e;
+}
+
+.tag{
+color:#555;
+margin-bottom:20px;
+}
+
+.card{
+background:white;
+padding:25px;
+width:370px;
+border-radius:12px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.tabs{
+display:flex;
+background:#eee;
+border-radius:20px;
+margin:10px 0;
+}
+
+.tabs button{
+flex:1;
+border:none;
+padding:8px;
+border-radius:20px;
+cursor:pointer;
+}
+
+.tabs button.active{
+background:#0f766e;
+color:white;
+}
+
+label{
+display:block;
+text-align:left;
+margin-top:10px;
+font-size:14px;
+}
+
+input{
+width:100%;
+padding:8px;
+margin-top:5px;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+.mainBtn{
+width:100%;
+margin-top:15px;
+padding:10px;
+border:none;
+background:#0f766e;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
+
+.hidden{
+display:none;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1 class="logo">🩺 Medicare</h1>
+<p class="tag">Your health journey starts here</p>
+
+<div class="card">
+
+<h2>Welcome</h2>
+<p>Login or create an account to continue</p>
+
+<div class="tabs">
+<button id="loginBtn" class="active">Login</button>
+<button id="signupBtn">Sign Up</button>
+</div>
+
+<!-- LOGIN -->
+
+<form id="loginForm">
+
+<label>Email</label> <input type="email" placeholder="you@example.com">
+
+<label>Password</label> <input type="password" placeholder="******">
+
+<button class="mainBtn">Login</button>
+
+</form>
+
+<!-- SIGNUP -->
+
+<form id="signupForm" class="hidden">
+
+<label>Full Name</label> <input type="text" placeholder="John Doe">
+
+<label>Email</label> <input type="email" placeholder="you@example.com">
+
+<label>Password</label> <input type="password" placeholder="******">
+
+<button class="mainBtn">Sign Up</button>
+
+</form>
+
+</div>
+
+</div>
+
+<script>
+
+let loginBtn = document.getElementById("loginBtn");
+let signupBtn = document.getElementById("signupBtn");
+
+let loginForm = document.getElementById("loginForm");
+let signupForm = document.getElementById("signupForm");
+
+
+loginBtn.addEventListener("click", function(){
+
+loginForm.classList.remove("hidden");
+signupForm.classList.add("hidden");
+
+loginBtn.classList.add("active");
+signupBtn.classList.remove("active");
+
+});
+
+signupBtn.addEventListener("click", function(){
+
+signupForm.classList.remove("hidden");
+loginForm.classList.add("hidden");
+
+signupBtn.classList.add("active");
+loginBtn.classList.remove("active");
+
+});
+
+
+// LOGIN
+
+loginForm.addEventListener("submit", async function(e){
+
+e.preventDefault();
+
+let email = loginForm[0].value;
+let password = loginForm[1].value;
+
+let res = await fetch("/login",{
+
+method:"POST",
+headers:{ "Content-Type":"application/json" },
+
+body:JSON.stringify({
+email:email,
+password:password
+})
+
+});
+
+let data = await res.json();
+
+if(res.ok){
+
+localStorage.setItem("userName", data.name);
+
+window.location.href="/dashboard";
+
+}else{
+
+alert(data.msg);
+
+}
+
+});
+
+
+// SIGNUP
+
+signupForm.addEventListener("submit", async function(e){
+
+e.preventDefault();
+
+let name = signupForm[0].value;
+let email = signupForm[1].value;
+let password = signupForm[3].value;
+
+let res = await fetch("/signup",{
+
+method:"POST",
+headers:{ "Content-Type":"application/json" },
+
+body:JSON.stringify({
+name:name,
+email:email,
+password:password
+})
+
+});
+
+let data = await res.json();
+
+if(res.ok){
+
+localStorage.setItem("userName", name);
+
+window.location.href="/dashboard";
+
+}else{
+
+alert(data.msg);
+
+}
+
+});
+
+</script>
+
+</body>
+</html>

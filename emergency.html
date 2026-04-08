@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emergency Contacts</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --bg-1:#fff7f7;
+  --bg-2:#fffaf5;
+  --bg-3:#f8fbff;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --red:#dc2626;
+  --red-dark:#991b1b;
+  --orange:#ea580c;
+  --border:#e5e7eb;
+  --shadow:0 18px 45px rgba(15,23,42,0.08);
+  --shadow-soft:0 10px 24px rgba(15,23,42,0.05);
+}
+
+body{
+  margin:0;
+  font-family:Segoe UI, system-ui, sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(239,68,68,0.10), transparent 26%),
+    radial-gradient(circle at 100% 0%, rgba(249,115,22,0.10), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(59,130,246,0.05), transparent 26%),
+    linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 45%, var(--bg-3) 100%);
+  min-height:100vh;
+}
+
+.navbar{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:18px 30px;
+  background:rgba(255,255,255,0.82);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(229,231,235,0.85);
+  color:var(--red);
+  font-weight:800;
+  font-size:17px;
+}
+
+.navbar i{
+  cursor:pointer;
+}
+
+.container{
+  max-width:1260px;
+  margin:42px auto 80px;
+  padding:0 24px;
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,255,255,0.86)),
+    linear-gradient(135deg, #fff1f2, #fff7ed);
+  border:1px solid rgba(252,165,165,0.45);
+  border-radius:32px;
+  padding:34px 34px 30px;
+  box-shadow:var(--shadow);
+  margin-bottom:28px;
+  isolation:isolate;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  width:260px;
+  height:260px;
+  right:-70px;
+  top:-90px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(239,68,68,0.22), transparent 68%);
+  z-index:-1;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  width:220px;
+  height:220px;
+  left:-70px;
+  bottom:-110px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(249,115,22,0.16), transparent 68%);
+  z-index:-1;
+}
+
+.hero-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.hero-main{
+  max-width:840px;
+}
+
+.hero-top{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+
+.hero-icon{
+  width:68px;
+  height:68px;
+  border-radius:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:28px;
+  background:linear-gradient(135deg, #ef4444, #f97316);
+  box-shadow:0 18px 28px rgba(239,68,68,0.25);
+}
+
+.hero-badges{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 15px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.86);
+  border:1px solid rgba(254,202,202,0.95);
+  color:var(--red-dark);
+  font-size:13px;
+  font-weight:800;
+  box-shadow:var(--shadow-soft);
+}
+
+.hero h1{
+  margin:0 0 12px;
+  font-family:Georgia, serif;
+  font-size:50px;
+  line-height:1.08;
+  color:var(--red-dark);
+  letter-spacing:-0.5px;
+}
+
+.hero p{
+  margin:0;
+  font-size:16px;
+  line-height:1.85;
+  color:var(--muted);
+}
+
+.hero-side{
+  min-width:220px;
+  display:grid;
+  gap:12px;
+}
+
+.side-chip{
+  background:rgba(255,255,255,0.82);
+  border:1px solid rgba(229,231,235,0.9);
+  border-radius:20px;
+  padding:16px 18px;
+  box-shadow:var(--shadow-soft);
+}
+
+.side-chip .label{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.side-chip .value{
+  color:var(--text);
+  font-size:18px;
+  font-weight:800;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:24px;
+}
+
+.panel{
+  position:relative;
+  overflow:hidden;
+  border-radius:28px;
+  background:rgba(255,255,255,0.84);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(226,232,240,0.9);
+  box-shadow:var(--shadow);
+  padding:26px;
+}
+
+.panel::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:6px;
+  background:linear-gradient(90deg, #ef4444, #f97316);
+}
+
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.panel-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.panel-title-icon{
+  width:48px;
+  height:48px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:20px;
+  background:linear-gradient(135deg, #ef4444, #f97316);
+  box-shadow:0 12px 20px rgba(239,68,68,0.18);
+}
+
+.panel h2{
+  margin:0;
+  font-size:28px;
+  font-family:Georgia, serif;
+  color:#0f172a;
+}
+
+.panel-sub{
+  color:var(--muted);
+  font-size:14px;
+  font-weight:600;
+}
+
+.list{
+  display:grid;
+  gap:16px;
+}
+
+.item{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.96));
+  border:1px solid rgba(226,232,240,1);
+  border-radius:20px;
+  padding:18px;
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  box-shadow:0 10px 22px rgba(15,23,42,0.04);
+}
+
+.item:hover{
+  transform:translateY(-4px);
+  box-shadow:0 18px 28px rgba(15,23,42,0.08);
+  border-color:#fecaca;
+}
+
+.item::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:4px;
+  height:100%;
+  background:linear-gradient(180deg, #ef4444, #f97316);
+}
+
+.item-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:14px;
+  margin-bottom:10px;
+}
+
+.item-title-wrap{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.item-dot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:linear-gradient(135deg, #ef4444, #f97316);
+  box-shadow:0 0 0 5px rgba(239,68,68,0.08);
+  margin-top:6px;
+  flex-shrink:0;
+}
+
+.item-title{
+  font-weight:800;
+  color:#0f172a;
+  font-size:21px;
+  line-height:1.3;
+}
+
+.badge-group{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:64px;
+  padding:9px 15px;
+  border-radius:999px;
+  background:linear-gradient(135deg, #fee2e2, #ffedd5);
+  color:#b91c1c;
+  font-weight:900;
+  font-size:13px;
+  white-space:nowrap;
+  border:1px solid #fecaca;
+  box-shadow:0 8px 14px rgba(239,68,68,0.08);
+}
+
+.call-btn{
+  text-decoration:none;
+  cursor:pointer;
+  position:relative;
+  transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+.call-btn:hover{
+  transform:translateY(-2px) scale(1.06);
+  box-shadow:0 14px 22px rgba(239,68,68,0.20);
+  filter:saturate(1.1);
+}
+
+.call-btn:active{
+  transform:scale(0.98);
+}
+
+.call-btn::after{
+  content:"\f095";
+  font-family:"Font Awesome 6 Free";
+  font-weight:900;
+  margin-left:8px;
+  font-size:11px;
+  opacity:.9;
+}
+
+.item p{
+  margin:0;
+  color:#475569;
+  line-height:1.85;
+  font-size:14px;
+  padding-left:22px;
+}
+
+.bottom-alert{
+  margin-top:28px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+  padding:22px 24px;
+  border-radius:24px;
+  background:linear-gradient(135deg, rgba(255,247,237,0.96), rgba(255,241,242,0.96));
+  border:1px solid rgba(253,186,116,0.85);
+  color:#9a3412;
+  box-shadow:var(--shadow-soft);
+}
+
+.bottom-alert::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg, rgba(249,115,22,0.04), rgba(239,68,68,0.02));
+  pointer-events:none;
+}
+
+.alert-icon{
+  width:46px;
+  height:46px;
+  min-width:46px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg, #f97316, #ef4444);
+  color:#fff;
+  font-size:20px;
+  box-shadow:0 14px 24px rgba(249,115,22,0.20);
+  position:relative;
+  z-index:1;
+}
+
+.alert-content{
+  position:relative;
+  z-index:1;
+}
+
+.alert-content h3{
+  margin:0 0 6px;
+  font-size:20px;
+  color:#9a3412;
+  font-family:Georgia, serif;
+}
+
+.alert-content p{
+  margin:0;
+  font-size:15px;
+  line-height:1.8;
+  font-weight:700;
+}
+
+@media (max-width: 980px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .hero h1{
+    font-size:40px;
+  }
+
+  .hero-side{
+    width:100%;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+  }
+}
+
+@media (max-width: 768px){
+  .container{
+    padding:0 16px;
+    margin:24px auto 50px;
+  }
+
+  .navbar{
+    padding:16px;
+  }
+
+  .hero{
+    padding:24px 20px;
+    border-radius:24px;
+  }
+
+  .hero h1{
+    font-size:32px;
+  }
+
+  .hero-side{
+    grid-template-columns:1fr;
+  }
+
+  .panel{
+    padding:20px;
+    border-radius:22px;
+  }
+
+  .panel h2{
+    font-size:24px;
+  }
+
+  .item-title{
+    font-size:18px;
+  }
+
+  .item-top{
+    flex-direction:column;
+  }
+
+  .badge-group{
+    justify-content:flex-start;
+  }
+
+  .bottom-alert{
+    padding:18px;
+    border-radius:20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <i class="fa-solid fa-arrow-left" onclick="goBack()"></i>
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  <span>Emergency Contacts</span>
+</div>
+
+<div class="container">
+  <div class="hero">
+    <div class="hero-row">
+      <div class="hero-main">
+        <div class="hero-top">
+          <div class="hero-icon">
+            <i class="fa-solid fa-siren-on"></i>
+          </div>
+
+          <div class="hero-badges">
+            <div class="hero-badge">
+              <i class="fa-solid fa-bolt"></i>
+              Emergency Support
+            </div>
+            <div class="hero-badge">
+              <i class="fa-solid fa-location-dot"></i>
+              Share Exact Location
+            </div>
+          </div>
+        </div>
+
+        <h1>Essential Emergency Services</h1>
+        <p>
+          Use these emergency helplines in urgent situations. Contact the appropriate service immediately based on the type of emergency. In critical moments, staying calm and sharing the exact location clearly can help emergency teams respond faster.
+        </p>
+      </div>
+
+      <div class="hero-side">
+        <div class="side-chip">
+          <div class="label">Primary emergency</div>
+          <div class="value">Police • Fire • Ambulance</div>
+        </div>
+
+        <div class="side-chip">
+          <div class="label">Best action</div>
+          <div class="value">Call first, explain clearly</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">
+          <div class="panel-title-icon">
+            <i class="fa-solid fa-shield-heart"></i>
+          </div>
+          <div>
+            <h2>Primary Emergency Services</h2>
+            <div class="panel-sub">Immediate-response helplines</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="list">
+        <div class="item">
+          <div class="item-top">
+            <div class="item-title-wrap">
+              <div class="item-dot"></div>
+              <div class="item-title">Police</div>
+            </div>
+            <div class="badge-group">
+              <a href="tel:100" class="badge call-btn">100</a>
+            </div>
+          </div>
+          <p>Dial 100 for reporting crimes, theft, or immediate danger.</p>
+        </div>
+
+        <div class="item">
+          <div class="item-top">
+            <div class="item-title-wrap">
+              <div class="item-dot"></div>
+              <div class="item-title">Fire Brigade</div>
+            </div>
+            <div class="badge-group">
+              <a href="tel:101" class="badge call-btn">101</a>
+            </div>
+          </div>
+          <p>Dial 101 for fires, explosions, or gas leaks.</p>
+        </div>
+
+        <div class="item">
+          <div class="item-top">
+            <div class="item-title-wrap">
+              <div class="item-dot"></div>
+              <div class="item-title">Ambulance</div>
+            </div>
+            <div class="badge-group">
+              <a href="tel:102" class="badge call-btn">102</a>
+              <a href="tel:108" class="badge call-btn">108</a>
+            </div>
+          </div>
+          <p>Dial 102 for free medical transport or 108 for general medical emergencies and accidents.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">
+          <div class="panel-title-icon">
+            <i class="fa-solid fa-phone-volume"></i>
+          </div>
+          <div>
+            <h2>Specialized Helplines</h2>
+            <div class="panel-sub">Support for specific emergencies</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="list">
+        <div class="item">
+          <div class="item-top">
+            <div class="item-title-wrap">
+              <div class="item-dot"></div>
+              <div class="item-title">Women Helpline</div>
+            </div>
+            <div class="badge-group">
+              <a href="tel:1091" class="badge call-btn">1091</a>
+              <a href="tel:181" class="badge call-btn">181</a>
+            </div>
+          </div>
+          <p>Dial 1091 for women in danger or 181 for domestic abuse support.</p>
+        </div>
+
+        <div class="item">
+          <div class="item-top">
+            <div class="item-title-wrap">
+              <div class="item-dot"></div>
+              <div class="item-title">Child Helpline</div>
+            </div>
+            <div class="badge-group">
+              <a href="tel:1098" class="badge call-btn">1098</a>
+            </div>
+          </div>
+          <p>Dial 1098 for reporting child abuse or assisting children in distress.</p>
+        </div>
+
+        <div class="item">
+          <div class="item-top">
+            <div class="item-title-wrap">
+              <div class="item-dot"></div>
+              <div class="item-title">Disaster Management</div>
+            </div>
+            <div class="badge-group">
+              <a href="tel:1078" class="badge call-btn">1078</a>
+              <a href="tel:1077" class="badge call-btn">1077</a>
+            </div>
+          </div>
+          <p>Dial 1078 or 1077 for natural disasters like floods and earthquakes.</p>
+        </div>
+
+        <div class="item">
+          <div class="item-top">
+            <div class="item-title-wrap">
+              <div class="item-dot"></div>
+              <div class="item-title">Railway Accident</div>
+            </div>
+            <div class="badge-group">
+              <a href="tel:1072" class="badge call-btn">1072</a>
+            </div>
+          </div>
+          <p>Dial 1072 for train-related emergencies.</p>
+        </div>
+
+        <div class="item">
+          <div class="item-top">
+            <div class="item-title-wrap">
+              <div class="item-dot"></div>
+              <div class="item-title">Road Accident</div>
+            </div>
+            <div class="badge-group">
+              <a href="tel:1073" class="badge call-btn">1073</a>
+              <a href="tel:1033" class="badge call-btn">1033</a>
+            </div>
+          </div>
+          <p>Dial 1073 for road accidents or 1033 for incidents on national highways.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-alert">
+    <div class="alert-icon">
+      <i class="fa-solid fa-circle-exclamation"></i>
+    </div>
+
+    <div class="alert-content">
+      <h3>In a life-threatening situation</h3>
+      <p>Contact emergency services first and share the exact location clearly.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function goBack(){
+  window.location.href = "/dashboard";
+}
+</script>
+
+</body>
+</html>
