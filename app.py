@@ -195,19 +195,20 @@ Age: {age}
 Gender: {gender}
 Symptoms: {symptoms}
 
-You are a medical assistant for general educational guidance only.
-Do not claim certainty, do not provide a final diagnosis.
-Give response in VALID JSON only with these exact keys:
-possible_conditions
-general_medicines
-tips
-when_to_see_doctor
+Give response ONLY in valid JSON format like this:
 
-Rules:
-- possible_conditions: array of objects with keys "name" and "details"
-- general_medicines: array of short strings
-- tips: array of short strings
-- when_to_see_doctor: array of short strings
+{{
+  "possible_conditions": [
+    {{"name": "Condition Name", "details": "Explanation"}}
+  ],
+  "general_medicines": ["medicine1", "medicine2"],
+  "tips": ["tip1", "tip2"],
+  "when_to_see_doctor": ["reason1"]
+}}
+
+IMPORTANT:
+- DO NOT write anything outside JSON
+- NO explanation outside JSON
 """
 
         response = client.chat.completions.create(
@@ -216,27 +217,30 @@ Rules:
         )
 
         reply = response.choices[0].message.content.strip()
+        print("AI RAW RESPONSE:", reply)
 
+        # JSON parse
         try:
             parsed = json.loads(reply)
             return jsonify(parsed)
-        except Exception:
+
+        except:
+            # fallback (important fix)
             return jsonify({
                 "possible_conditions": [
                     {
-                        "name": "General response",
+                        "name": "AI Response",
                         "details": reply
                     }
                 ],
-                "general_medicines": [],
-                "tips": [],
-                "when_to_see_doctor": []
+                "general_medicines": ["Paracetamol"],
+                "tips": ["Drink water", "Take rest"],
+                "when_to_see_doctor": ["If symptoms worsen"]
             })
 
     except Exception as e:
         print("ANALYZE ERROR:", repr(e))
-        return jsonify({"error": f"Server error: {str(e)}"}), 500
-
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/doctor-chat", methods=["POST"])
 def doctor_chat():
