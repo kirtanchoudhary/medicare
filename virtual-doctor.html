@@ -2,16 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Virtual Doctor</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
 font-family:system-ui;
 background:#f4f6f8;
+color:#0f172a;
+overflow-x:hidden;
 }
 
 .navbar{
@@ -38,16 +45,18 @@ gap:6px;
 .container{
 max-width:900px;
 margin:40px auto;
+padding:0 20px;
 }
 
 .chatBox{
 background:white;
-border-radius:12px;
+border-radius:16px;
 border:1px solid #ddd;
-height:500px;
+height:560px;
 display:flex;
 flex-direction:column;
 overflow:hidden;
+box-shadow:0 8px 24px rgba(15, 23, 42, 0.06);
 }
 
 .chatArea{
@@ -57,6 +66,7 @@ overflow-y:auto;
 display:flex;
 flex-direction:column;
 gap:10px;
+background:#ffffff;
 }
 
 .welcome{
@@ -67,6 +77,7 @@ justify-content:center;
 flex-direction:column;
 color:#0f766e;
 text-align:center;
+padding:20px;
 }
 
 .welcome i{
@@ -76,33 +87,38 @@ margin-bottom:10px;
 
 .welcome h2{
 margin:0 0 10px;
+font-size:28px;
 }
 
 .welcome p{
 max-width:520px;
 line-height:1.7;
 margin:0;
+color:#475569;
 }
 
 .msg{
-padding:10px 14px;
-border-radius:12px;
+padding:12px 14px;
+border-radius:14px;
 max-width:72%;
-line-height:1.6;
+line-height:1.7;
 white-space:pre-wrap;
 word-break:break-word;
+font-size:15px;
 }
 
 .user{
 background:#0f766e;
 color:white;
 align-self:flex-end;
+border-bottom-right-radius:6px;
 }
 
 .bot{
 background:#eef6f6;
 color:#0f172a;
 align-self:flex-start;
+border-bottom-left-radius:6px;
 }
 
 .typing{
@@ -112,32 +128,103 @@ opacity:0.8;
 
 .inputArea{
 display:flex;
+align-items:center;
 border-top:1px solid #ddd;
 padding:10px;
 gap:10px;
+background:white;
 }
 
 .inputArea input{
 flex:1;
-padding:10px;
-border-radius:20px;
+padding:12px 14px;
+border-radius:22px;
 border:1px solid #ccc;
 outline:none;
+font-size:14px;
+}
+
+.inputArea input:focus{
+border-color:#0f766e;
+box-shadow:0 0 0 3px rgba(15,118,110,.10);
 }
 
 .inputArea button{
 background:#0f766e;
 color:white;
 border:none;
-padding:10px 16px;
-border-radius:20px;
+padding:12px 18px;
+border-radius:22px;
 cursor:pointer;
-min-width:72px;
+min-width:78px;
+font-weight:600;
 }
 
 .inputArea button:disabled{
 opacity:0.7;
 cursor:not-allowed;
+}
+
+@media (max-width: 768px){
+  .navbar{
+    padding:12px 16px;
+    font-size:15px;
+  }
+
+  .container{
+    margin:16px auto;
+    padding:0 12px;
+  }
+
+  .chatBox{
+    height:calc(100vh - 110px);
+    min-height:520px;
+    border-radius:14px;
+  }
+
+  .chatArea{
+    padding:14px;
+    gap:8px;
+  }
+
+  .welcome{
+    padding:12px;
+  }
+
+  .welcome i{
+    font-size:34px;
+  }
+
+  .welcome h2{
+    font-size:22px;
+  }
+
+  .welcome p{
+    font-size:14px;
+    line-height:1.6;
+  }
+
+  .msg{
+    max-width:88%;
+    font-size:14px;
+    padding:11px 12px;
+  }
+
+  .inputArea{
+    padding:8px;
+    gap:8px;
+  }
+
+  .inputArea input{
+    padding:11px 12px;
+    font-size:14px;
+  }
+
+  .inputArea button{
+    min-width:72px;
+    padding:11px 14px;
+    font-size:14px;
+  }
 }
 </style>
 </head>
@@ -161,8 +248,8 @@ cursor:not-allowed;
         <h2>Hi! I'm Dr. Medicare</h2>
         <p>
           I'm here to help answer your health questions
-          and provide medical guidance.
-          Feel free to ask me anything!
+          and provide general health guidance.
+          Feel free to ask me anything.
         </p>
       </div>
     </div>
@@ -210,9 +297,9 @@ function addMsg(text, type){
 }
 
 async function sendMsg(){
-  let input = document.getElementById("msg");
-  let sendBtn = document.getElementById("sendBtn");
-  let text = input.value.trim();
+  const input = document.getElementById("msg");
+  const sendBtn = document.getElementById("sendBtn");
+  const text = input.value.trim();
 
   if(!text) return;
 
@@ -224,13 +311,13 @@ async function sendMsg(){
   const typingMsg = addMsg("Dr. Medicare is typing...", "bot typing");
 
   try{
-    let res = await fetch("/doctor-chat", {
+    const res = await fetch("/doctor-chat", {
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       body:JSON.stringify({ history: history })
     });
 
-    let data = await res.json();
+    const data = await res.json();
     typingMsg.remove();
 
     const reply = data.reply || "Sorry, I could not respond right now.";
