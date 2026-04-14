@@ -4,217 +4,587 @@
 <meta charset="UTF-8">
 <title>Symptom Checker</title>
 
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
 body{
 margin:0;
 font-family:system-ui;
 background:#f4f6f8;
+color:#0f172a;
+}
+
+.navbar{
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px 30px;
+background:white;
+border-bottom:1px solid #ddd;
+font-weight:600;
+color:#0f766e;
+cursor:pointer;
 }
 
 .container{
 max-width:1100px;
 margin:auto;
-padding:40px;
+padding:40px 20px;
+}
+
+.page-head{
+margin-bottom:24px;
+}
+
+.page-head h1{
+font-family:Georgia;
+font-size:36px;
+margin:0 0 10px;
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.page-head p{
+margin:0;
+font-size:16px;
+color:#64748b;
+line-height:1.6;
 }
 
 .flex{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:30px;
+gap:28px;
+align-items:start;
 }
 
 .card{
 background:white;
 padding:20px;
-border-radius:12px;
+border-radius:14px;
 border:1px solid #ddd;
+box-shadow:0 8px 20px rgba(15, 23, 42, 0.05);
 }
 
-textarea, input, select{
+.left-title{
+font-size:14px;
+font-weight:700;
+margin-bottom:4px;
+}
+
+.left-sub{
+font-size:14px;
+color:#64748b;
+margin-bottom:18px;
+}
+
+label{
+display:block;
+font-size:14px;
+font-weight:600;
+margin-bottom:7px;
+color:#0f172a;
+}
+
+textarea{
 width:100%;
-padding:10px;
-border-radius:10px;
+height:120px;
+padding:12px;
+border-radius:12px;
 border:1px solid #ccc;
-margin-bottom:10px;
+resize:none;
+box-sizing:border-box;
+font-family:inherit;
+font-size:14px;
+outline:none;
 }
 
-button{
+textarea:focus,
+input:focus,
+select:focus{
+border-color:#0f766e;
+box-shadow:0 0 0 3px rgba(15,118,110,.10);
+}
+
+.row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+margin-top:14px;
+}
+
+input,select{
+width:100%;
+padding:10px 12px;
+border-radius:12px;
+border:1px solid #ccc;
+box-sizing:border-box;
+font-size:14px;
+outline:none;
+background:white;
+}
+
+.field-error{
+display:none;
+margin-top:6px;
+font-size:13px;
+color:#b91c1c;
+line-height:1.5;
+}
+
+.input-error{
+border-color:#ef4444 !important;
+box-shadow:0 0 0 3px rgba(239,68,68,.10) !important;
+}
+
+.action-row{
+display:flex;
+gap:10px;
+margin-top:16px;
+}
+
+.btn{
+flex:1;
 padding:12px;
 background:#0f766e;
 color:white;
 border:none;
 border-radius:999px;
 cursor:pointer;
-width:100%;
+font-weight:700;
 }
 
-.result{
+.btn.secondary{
+flex:0 0 auto;
+padding:12px 22px;
 background:white;
-padding:20px;
-border-radius:12px;
-border:1px solid #ddd;
-min-height:300px;
+color:#475569;
+border:1px solid #d1d5db;
 }
 
-.error{
-background:#fee2e2;
+.result-card{
+background:white;
+border-radius:14px;
+border:1px solid #ddd;
+overflow:hidden;
+box-shadow:0 8px 20px rgba(15, 23, 42, 0.05);
+}
+
+.result-head{
+padding:18px 20px;
+background:#eef9f7;
+color:#0f766e;
+font-weight:700;
+font-size:22px;
+}
+
+.result-body{
+padding:20px;
+min-height:450px;
+}
+
+.placeholder{
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+color:#94a3b8;
+font-size:16px;
+line-height:1.7;
+}
+
+.section-block{
+margin-bottom:26px;
+}
+
+.section-block:last-child{
+margin-bottom:0;
+}
+
+.section-block h3{
+margin:0 0 14px;
+font-family:Georgia;
+font-size:18px;
+color:#0f766e;
+}
+
+.section-block ul{
+margin:0;
+padding-left:22px;
+line-height:1.9;
+color:#1e293b;
+}
+
+.section-block li{
+margin-bottom:8px;
+}
+
+.section-block p{
+margin:0 0 10px;
+line-height:1.8;
+color:#1e293b;
+}
+
+.condition-name{
+font-weight:700;
+}
+
+.loading{
+color:#0f766e;
+font-weight:700;
+text-align:center;
+padding:30px 10px;
+}
+
+.error-box{
+background:#fef2f2;
 color:#b91c1c;
-padding:10px;
-border-radius:10px;
+border:1px solid #fecaca;
+padding:14px;
+border-radius:12px;
+line-height:1.7;
+}
+
+@media (max-width: 900px){
+.flex{
+grid-template-columns:1fr;
+}
+}
+
+@media (max-width: 768px){
+.navbar{
+padding:12px 16px;
+}
+.container{
+padding:24px 16px;
+}
+.page-head h1{
+font-size:30px;
+}
+.row{
+grid-template-columns:1fr;
+}
 }
 </style>
-</head>
 
+</head>
 <body>
+
+<div class="navbar" onclick="goBack()">
+  <i class="fa-solid fa-arrow-left"></i>
+  <i class="fa-solid fa-heart-pulse"></i>
+  Symptom Checker
+</div>
 
 <div class="container">
 
-<h2>Symptom Checker</h2>
+  <div class="page-head">
+    <h1><i class="fa-solid fa-heart-pulse" style="color:#0f766e;"></i> Symptom Checker</h1>
+    <p>
+      Describe your symptoms and get AI-powered analysis with possible diagnoses and recommendations.
+    </p>
+  </div>
 
-<div class="flex">
+  <div class="flex">
 
-<div class="card">
-<label>Symptoms</label>
-<textarea id="symptoms"></textarea>
+    <div class="card">
+      <div class="left-title">Describe Your Symptoms</div>
+      <div class="left-sub">Be as detailed as possible for accurate results</div>
 
-<label>Age</label>
-<input id="age" type="number">
+      <label>Symptoms *</label>
+      <textarea id="symptoms" placeholder="E.g., headache, fever, body pain, sore throat..."></textarea>
 
-<label>Gender</label>
-<select id="gender">
-<option>Select</option>
-<option>Male</option>
-<option>Female</option>
-</select>
+      <div class="row">
+        <div>
+          <label>Age</label>
+          <input
+            type="text"
+            id="age"
+            placeholder="25"
+            inputmode="numeric"
+            maxlength="3"
+            autocomplete="off"
+            oninput="handleAgeInput(this)"
+            onkeypress="return allowOnlyDigits(event)"
+            onpaste="handleAgePaste(event)"
+          >
+          <div class="field-error" id="ageError"></div>
+        </div>
 
-<button onclick="analyze()">Analyze</button>
-</div>
+        <div>
+          <label>Gender</label>
+          <select id="gender">
+            <option>Select</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
 
-<div class="result" id="resultBox">
-Result will appear here
-</div>
+      <div class="action-row">
+        <button class="btn" onclick="analyzeSymptoms()">Analyze Symptoms</button>
+        <button class="btn secondary" onclick="resetForm()">Reset</button>
+      </div>
+    </div>
 
-</div>
+    <div class="result-card">
+      <div class="result-head">Possible Conditions</div>
+      <div class="result-body" id="resultBox">
+        <div class="placeholder">
+          Your symptom analysis will appear here
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
 <script>
-
-// 🔥 IMPORTANT FIX
-function normalize(data){
-
-// Agar backend string bhej raha hai
-if(typeof data === "string"){
-try{
-return JSON.parse(data);
-}catch{
-return {
-possible_conditions:[{name:"Result",details:data}]
-};
-}
+function goBack(){
+  window.location.href="/dashboard";
 }
 
-// Agar backend me error aaye
-if(data.error){
-return {
-possible_conditions:[{name:"Error",details:data.error}]
-};
+function showAgeError(message){
+  const age = document.getElementById("age");
+  const ageError = document.getElementById("ageError");
+  age.classList.add("input-error");
+  ageError.style.display = "block";
+  ageError.textContent = message;
 }
 
-// Agar empty response aaye
-if(!data || Object.keys(data).length === 0){
-return {
-possible_conditions:[{name:"No Data",details:"No analysis returned"}]
-};
+function clearAgeError(){
+  const age = document.getElementById("age");
+  const ageError = document.getElementById("ageError");
+  age.classList.remove("input-error");
+  ageError.style.display = "none";
+  ageError.textContent = "";
 }
 
-return data;
+function allowOnlyDigits(event){
+  const key = event.key;
+  if(
+    key === "Backspace" ||
+    key === "Delete" ||
+    key === "ArrowLeft" ||
+    key === "ArrowRight" ||
+    key === "Tab"
+  ){
+    return true;
+  }
+
+  return /^[0-9]$/.test(key);
 }
 
-// 🔥 PROPER UI RENDER
-function render(data){
+function handleAgePaste(event){
+  event.preventDefault();
+  const pasted = (event.clipboardData || window.clipboardData).getData("text");
+  const digitsOnly = pasted.replace(/\D/g, "").slice(0, 3);
+  document.getElementById("age").value = digitsOnly;
 
-let html = "";
-
-// CONDITIONS
-if(data.possible_conditions && data.possible_conditions.length){
-html += "<h3>Possible Conditions</h3>";
-
-data.possible_conditions.forEach(c=>{
-if(typeof c === "string"){
-html += `<p>${c}</p>`;
-}else{
-html += `<p><b>${c.name}</b>: ${c.details}</p>`;
-}
-});
+  if(digitsOnly && Number(digitsOnly) > 100){
+    showAgeError("Age must be between 0 and 100 only.");
+  }else{
+    clearAgeError();
+  }
 }
 
-// MEDICINES
-if(data.general_medicines && data.general_medicines.length){
-html += "<h3>Medicines</h3><ul>";
-data.general_medicines.forEach(m=>{
-html += `<li>${m}</li>`;
-});
-html += "</ul>";
+function handleAgeInput(input){
+  input.value = input.value.replace(/\D/g, "").slice(0, 3);
+
+  if(!input.value){
+    clearAgeError();
+    return;
+  }
+
+  const ageNum = Number(input.value);
+
+  if(ageNum > 100){
+    showAgeError("Age must be between 0 and 100 only.");
+  }else{
+    clearAgeError();
+  }
 }
 
-// TIPS
-if(data.tips && data.tips.length){
-html += "<h3>Tips</h3><ul>";
-data.tips.forEach(t=>{
-html += `<li>${t}</li>`;
-});
-html += "</ul>";
+function resetForm(){
+  document.getElementById("symptoms").value = "";
+  document.getElementById("age").value = "";
+  document.getElementById("gender").value = "Select";
+  clearAgeError();
+  document.getElementById("resultBox").innerHTML = `
+    <div class="placeholder">
+      Your symptom analysis will appear here
+    </div>
+  `;
 }
 
-// DOCTOR
-if(data.when_to_see_doctor && data.when_to_see_doctor.length){
-html += "<h3>When to see doctor</h3><ul>";
-data.when_to_see_doctor.forEach(d=>{
-html += `<li>${d}</li>`;
-});
-html += "</ul>";
+function escapeHtml(text){
+  const div = document.createElement("div");
+  div.textContent = text == null ? "" : String(text);
+  return div.innerHTML;
 }
 
-// fallback
-if(html === ""){
-html = "<div class='error'>No analysis returned ❌</div>";
+function renderStructuredResult(data){
+  let conditionsHtml = "";
+  let medicinesHtml = "";
+  let tipsHtml = "";
+  let doctorHtml = "";
+
+  if(Array.isArray(data.possible_conditions)){
+    conditionsHtml = data.possible_conditions.map(item => `
+      <p><span class="condition-name">${escapeHtml(item.name || "")}:</span> ${escapeHtml(item.details || "")}</p>
+    `).join("");
+  }
+
+  if(Array.isArray(data.general_medicines)){
+    medicinesHtml = data.general_medicines.map(item => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  if(Array.isArray(data.tips)){
+    tipsHtml = data.tips.map(item => `<li>${escapeHtml(item)}</li>`).join("");
+  }else if(Array.isArray(data.health_tips)){
+    tipsHtml = data.health_tips.map(item => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  if(Array.isArray(data.when_to_see_doctor)){
+    doctorHtml = data.when_to_see_doctor.map(item => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  return `
+    <div class="section-block">
+      <h3>Possible Conditions</h3>
+      ${conditionsHtml || "<p>No clear conditions found.</p>"}
+    </div>
+
+    <div class="section-block">
+      <h3>General Medicines</h3>
+      <ul>${medicinesHtml || "<li>No general medicine suggestions available.</li>"}</ul>
+    </div>
+
+    <div class="section-block">
+      <h3>Health Tips</h3>
+      <ul>${tipsHtml || "<li>No tips available.</li>"}</ul>
+    </div>
+
+    <div class="section-block">
+      <h3>When to See a Doctor</h3>
+      <ul>${doctorHtml || "<li>Please consult a doctor if symptoms continue.</li>"}</ul>
+    </div>
+  `;
 }
 
-return html;
+function normalizeAnalyzeResponse(data){
+  if(!data || typeof data !== "object"){
+    return null;
+  }
+
+  if(
+    Array.isArray(data.possible_conditions) ||
+    Array.isArray(data.general_medicines) ||
+    Array.isArray(data.tips) ||
+    Array.isArray(data.health_tips) ||
+    Array.isArray(data.when_to_see_doctor)
+  ){
+    return data;
+  }
+
+  if(typeof data.result === "string" && data.result.trim()){
+    try{
+      return JSON.parse(data.result);
+    }catch(e){
+      const cleaned = data.result
+        .replace(/^```json\s*/i, "")
+        .replace(/^```\s*/i, "")
+        .replace(/\s*```$/i, "");
+
+      try{
+        return JSON.parse(cleaned);
+      }catch(err){
+        return {
+          possible_conditions: [
+            {
+              name: "Analysis Result",
+              details: data.result
+            }
+          ],
+          general_medicines: [],
+          tips: [],
+          when_to_see_doctor: []
+        };
+      }
+    }
+  }
+
+  return null;
 }
 
-// 🔥 MAIN FUNCTION
-async function analyze(){
+async function analyzeSymptoms(){
+  const symptoms = document.getElementById("symptoms").value.trim();
+  const age = document.getElementById("age").value.trim();
+  const gender = document.getElementById("gender").value;
+  const resultBox = document.getElementById("resultBox");
 
-let symptoms = document.getElementById("symptoms").value;
-let age = document.getElementById("age").value;
-let gender = document.getElementById("gender").value;
-let box = document.getElementById("resultBox");
+  clearAgeError();
 
-box.innerHTML = "Analyzing... ⏳";
+  if(!symptoms || !age || gender === "Select"){
+    resultBox.innerHTML = `<div class="error-box">Please fill all fields.</div>`;
+    return;
+  }
 
-try{
+  const ageNum = Number(age);
 
-let res = await fetch("/analyze",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({symptoms,age,gender})
-});
+  if(!age || Number.isNaN(ageNum) || ageNum < 0 || ageNum > 100){
+    showAgeError("Age must be between 0 and 100 only.");
+    return;
+  }
 
-let data = await res.json();
+  resultBox.innerHTML = `<div class="loading">Analyzing symptoms... ⏳</div>`;
 
-console.log("API RESPONSE:", data); // debugging
+  try{
+    const res = await fetch("/analyze", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({
+        symptoms:symptoms,
+        age:String(ageNum),
+        gender:gender
+      })
+    });
 
-let parsed = normalize(data);
+    const data = await res.json();
 
-box.innerHTML = render(parsed);
+    if(!res.ok){
+      if((data.error || "").toLowerCase().includes("age must be between 0 and 100")){
+        showAgeError(data.error);
+        resultBox.innerHTML = `
+          <div class="placeholder">
+            Your symptom analysis will appear here
+          </div>
+        `;
+        return;
+      }
 
-}catch(e){
-box.innerHTML = `<div class="error">Server Error ❌</div>`;
+      resultBox.innerHTML = `<div class="error-box">${escapeHtml(data.error || "Something went wrong.")}</div>`;
+      return;
+    }
+
+    const parsed = normalizeAnalyzeResponse(data);
+
+    if(!parsed){
+      resultBox.innerHTML = `<div class="error-box">No analysis returned.</div>`;
+      return;
+    }
+
+    resultBox.innerHTML = renderStructuredResult(parsed);
+
+  }catch(err){
+    resultBox.innerHTML = `<div class="error-box">Server error ❌</div>`;
+  }
 }
-
-}
-
 </script>
 
 </body>
