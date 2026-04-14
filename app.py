@@ -154,8 +154,8 @@ def doctor_chat():
         return jsonify({"reply": reply})
 
     except Exception as e:
-        return jsonify({"reply": "Server error"}), 500
-
+    print("ANALYZE ERROR:", repr(e))
+    return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 # ✅ IMPORTANT FOR RENDER DEPLOY
 if __name__ == "__main__":
