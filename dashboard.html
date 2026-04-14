@@ -566,31 +566,101 @@ grid-template-columns:1fr;
 }
 }
 
+@media (max-width: 900px){
+  .health-wrap{
+    grid-template-columns:1fr;
+  }
+}
+
 @media (max-width: 768px){
-.navbar{
-padding:14px 20px;
-}
 
-.hero h1{
-font-size:38px;
-}
+  body{
+    overflow-x:hidden;
+  }
 
-.hero-greeting{
-font-size:16px;
-}
+  /* NAVBAR */
+  .navbar{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+    padding:14px 16px;
+  }
 
-.user-name{
-font-size:15px;
-}
+  .nav-right{
+    width:100%;
+    flex-wrap:wrap;
+  }
 
-.popup-box{
-width:100%;
-max-width:370px;
-}
+  .user-box{
+    width:100%;
+    justify-content:flex-start;
+    flex-wrap:wrap;
+  }
 
-.health-left h2{
-font-size:30px;
-}
+  /* HERO */
+  .hero{
+    padding:40px 15px;
+  }
+
+  .hero-greeting{
+    font-size:20px;
+  }
+
+  .hero h1{
+    font-size:32px;
+    line-height:1.2;
+  }
+
+  .hero p{
+    font-size:14px;
+  }
+
+  .hero button{
+    width:100%;
+    max-width:260px;
+  }
+
+  /* CARDS */
+  .cards{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .card{
+    width:100%;
+    max-width:320px;
+  }
+
+  /* HEALTH SECTION */
+  .health-wrap{
+    grid-template-columns:1fr;
+    padding:20px;
+  }
+
+  .health-left h2{
+    font-size:28px;
+  }
+
+  .health-right{
+    grid-template-columns:1fr;
+  }
+
+  /* EMERGENCY */
+  .emergency{
+    flex-direction:column;
+    align-items:flex-start;
+    text-align:left;
+  }
+
+  .emergency button{
+    width:100%;
+  }
+
+  /* POPUP */
+  .popup-box{
+    width:100%;
+    max-width:350px;
+  }
 }
 </style>
 </head>
