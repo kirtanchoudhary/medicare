@@ -2,17 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Symptom Checker</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
 font-family:system-ui;
 background:#f4f6f8;
 color:#0f172a;
+overflow-x:hidden;
 }
 
 .navbar{
@@ -44,6 +50,7 @@ margin:0 0 10px;
 display:flex;
 align-items:center;
 gap:12px;
+line-height:1.2;
 }
 
 .page-head p{
@@ -154,6 +161,7 @@ border:none;
 border-radius:999px;
 cursor:pointer;
 font-weight:700;
+font-size:14px;
 }
 
 .btn.secondary{
@@ -249,24 +257,88 @@ line-height:1.7;
 }
 
 @media (max-width: 900px){
-.flex{
-grid-template-columns:1fr;
-}
+  .flex{
+    grid-template-columns:1fr;
+  }
 }
 
 @media (max-width: 768px){
-.navbar{
-padding:12px 16px;
-}
-.container{
-padding:24px 16px;
-}
-.page-head h1{
-font-size:30px;
-}
-.row{
-grid-template-columns:1fr;
-}
+  .navbar{
+    padding:12px 16px;
+    font-size:15px;
+  }
+
+  .container{
+    padding:24px 16px;
+  }
+
+  .page-head{
+    margin-bottom:18px;
+  }
+
+  .page-head h1{
+    font-size:28px;
+    gap:10px;
+    align-items:flex-start;
+  }
+
+  .page-head p{
+    font-size:14px;
+    line-height:1.6;
+  }
+
+  .card{
+    padding:16px;
+    border-radius:12px;
+  }
+
+  .row{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+
+  textarea{
+    height:110px;
+    font-size:14px;
+  }
+
+  input,
+  select{
+    font-size:14px;
+  }
+
+  .action-row{
+    flex-direction:column;
+  }
+
+  .btn,
+  .btn.secondary{
+    width:100%;
+  }
+
+  .result-head{
+    font-size:20px;
+    padding:16px;
+  }
+
+  .result-body{
+    padding:16px;
+    min-height:300px;
+  }
+
+  .placeholder{
+    font-size:14px;
+  }
+
+  .section-block h3{
+    font-size:17px;
+  }
+
+  .section-block p,
+  .section-block li{
+    font-size:14px;
+    line-height:1.7;
+  }
 }
 </style>
 
@@ -435,9 +507,12 @@ function renderStructuredResult(data){
   let doctorHtml = "";
 
   if(Array.isArray(data.possible_conditions)){
-    conditionsHtml = data.possible_conditions.map(item => `
-      <p><span class="condition-name">${escapeHtml(item.name || "")}:</span> ${escapeHtml(item.details || "")}</p>
-    `).join("");
+    conditionsHtml = data.possible_conditions.map(item => {
+      if(typeof item === "string"){
+        return `<p>${escapeHtml(item)}</p>`;
+      }
+      return `<p><span class="condition-name">${escapeHtml(item.name || "")}:</span> ${escapeHtml(item.details || "")}</p>`;
+    }).join("");
   }
 
   if(Array.isArray(data.general_medicines)){
@@ -478,7 +553,27 @@ function renderStructuredResult(data){
 }
 
 function normalizeAnalyzeResponse(data){
-  if(!data || typeof data !== "object"){
+  if(!data) return null;
+
+  if(typeof data === "string"){
+    try{
+      return JSON.parse(data);
+    }catch(e){
+      return {
+        possible_conditions: [
+          {
+            name: "Analysis Result",
+            details: data
+          }
+        ],
+        general_medicines: [],
+        tips: [],
+        when_to_see_doctor: []
+      };
+    }
+  }
+
+  if(typeof data !== "object"){
     return null;
   }
 
@@ -517,6 +612,20 @@ function normalizeAnalyzeResponse(data){
         };
       }
     }
+  }
+
+  if(data.error){
+    return {
+      possible_conditions: [
+        {
+          name: "Error",
+          details: data.error
+        }
+      ],
+      general_medicines: [],
+      tips: [],
+      when_to_see_doctor: []
+    };
   }
 
   return null;
