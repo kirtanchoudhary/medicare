@@ -2,16 +2,22 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Medicare</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
 font-family:Segoe UI, sans-serif;
 background:#f3f7f7;
+overflow-x:hidden;
 }
 
 /* NAVBAR */
@@ -95,6 +101,8 @@ line-height:1.2;
 font-size:48px;
 font-family:Georgia;
 margin-top:0;
+margin-bottom:14px;
+line-height:1.2;
 }
 
 .hero span{
@@ -105,6 +113,8 @@ color:#0f766e;
 max-width:600px;
 margin:auto;
 color:#555;
+font-size:16px;
+line-height:1.6;
 }
 
 .hero button{
@@ -129,6 +139,10 @@ border:1px solid #ccc;
 .section{
 text-align:center;
 padding:60px 20px;
+}
+
+.section h2{
+margin-top:0;
 }
 
 .cards{
@@ -182,6 +196,7 @@ margin:0 0 10px;
 font-size:38px;
 font-family:Georgia;
 color:#111827;
+line-height:1.2;
 }
 
 .health-left p{
@@ -235,6 +250,7 @@ margin-bottom:12px;
 color:#0f172a;
 position:relative;
 z-index:1;
+line-height:1.3;
 }
 
 .tip-list{
@@ -560,25 +576,19 @@ line-height:1.5;
 text-align:left;
 }
 
-@media (max-width: 900px){
-.health-wrap{
-grid-template-columns:1fr;
-}
-}
-
+/* TABLET */
 @media (max-width: 900px){
   .health-wrap{
     grid-template-columns:1fr;
   }
 }
 
+/* MOBILE */
 @media (max-width: 768px){
-
   body{
     overflow-x:hidden;
   }
 
-  /* NAVBAR */
   .navbar{
     flex-direction:column;
     align-items:flex-start;
@@ -586,9 +596,22 @@ grid-template-columns:1fr;
     padding:14px 16px;
   }
 
+  .logo{
+    font-size:20px;
+  }
+
   .nav-right{
     width:100%;
+    display:flex;
     flex-wrap:wrap;
+    gap:10px;
+    justify-content:flex-start;
+  }
+
+  .nav-right button,
+  .logout-btn{
+    padding:8px 14px;
+    font-size:14px;
   }
 
   .user-box{
@@ -597,56 +620,114 @@ grid-template-columns:1fr;
     flex-wrap:wrap;
   }
 
-  /* HERO */
+  .user-name{
+    font-size:15px;
+    word-break:break-word;
+  }
+
   .hero{
-    padding:40px 15px;
+    padding:42px 16px;
   }
 
   .hero-greeting{
     font-size:20px;
+    line-height:1.3;
+    margin-bottom:10px;
   }
 
   .hero h1{
-    font-size:32px;
+    font-size:34px;
     line-height:1.2;
+    margin-bottom:12px;
   }
 
   .hero p{
-    font-size:14px;
+    font-size:15px;
+    line-height:1.7;
+    max-width:100%;
   }
 
   .hero button{
     width:100%;
-    max-width:260px;
+    max-width:280px;
+    display:block;
+    margin:12px auto 0;
+    font-size:14px;
   }
 
-  /* CARDS */
+  .section{
+    padding:42px 16px;
+  }
+
+  .section h2{
+    font-size:30px;
+    margin-bottom:24px;
+  }
+
   .cards{
     flex-direction:column;
     align-items:center;
+    gap:16px;
   }
 
   .card{
     width:100%;
-    max-width:320px;
+    max-width:340px;
+    padding:22px 18px;
   }
 
-  /* HEALTH SECTION */
+  .health-section{
+    padding:20px 16px 42px;
+  }
+
   .health-wrap{
     grid-template-columns:1fr;
-    padding:20px;
+    padding:20px 16px;
+    gap:18px;
   }
 
   .health-left h2{
-    font-size:28px;
+    font-size:32px;
+    line-height:1.2;
+  }
+
+  .health-left p{
+    font-size:14px;
+  }
+
+  .tip-box{
+    min-height:auto;
+    padding:18px;
+  }
+
+  .tip-title{
+    font-size:22px;
+  }
+
+  .tip-list{
+    font-size:14px;
+    line-height:1.7;
   }
 
   .health-right{
     grid-template-columns:1fr;
+    gap:14px;
   }
 
-  /* EMERGENCY */
+  .mini-card{
+    padding:18px;
+  }
+
+  .mini-card h3{
+    font-size:17px;
+  }
+
+  .mini-card p{
+    font-size:14px;
+  }
+
   .emergency{
+    padding:22px 16px;
     flex-direction:column;
     align-items:flex-start;
     text-align:left;
@@ -654,12 +735,17 @@ grid-template-columns:1fr;
 
   .emergency button{
     width:100%;
+    max-width:260px;
   }
 
-  /* POPUP */
+  .footer{
+    padding:24px 16px;
+  }
+
   .popup-box{
     width:100%;
     max-width:350px;
+    padding:22px 18px;
   }
 }
 </style>
